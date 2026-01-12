@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ${DOCKER_NAME}-db
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - main
+
+  redis:
+    image: redis:latest
+    container_name: ${DOCKER_NAME}-redis
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:6379"
+    command: redis-server --appendonly yes
+    networks:
+      - main
+
+  tomcat:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${DOCKER_NAME}-tomcat
+    ports:
+      - "${TOMCAT_PORT}:${TOMCAT_PORT}"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - main
+
+networks:
+  main:
+    driver: bridge
+    name: ${DOCKER_NETWORK_NAME}

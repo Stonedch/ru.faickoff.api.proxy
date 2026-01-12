@@ -1,0 +1,10 @@
+CREATE TABLE proxies (
+    id BIGSERIAL PRIMARY KEY,
+    uid BIGINT NOT NULL,
+    address VARCHAR(31) NOT NULL,
+    http_port INT NOT NULL,
+    socks5_port INT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
