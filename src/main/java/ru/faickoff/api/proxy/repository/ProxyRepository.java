@@ -14,4 +14,6 @@ public interface ProxyRepository extends JpaRepository<Proxy, Long> {
     public List<Proxy> findAllByUid(Long uid);
 
     public Optional<Proxy> findByIdAndUid(Long id, Long uid);
+
+    public void deleteByIdAndUid(Long id, Long uid);
 }

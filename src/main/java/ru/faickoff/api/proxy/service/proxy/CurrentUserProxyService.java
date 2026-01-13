@@ -32,4 +32,10 @@ public class CurrentUserProxyService {
         Proxy created = this.proxyService.create(creating);
         return created;
     }
+
+    public void deleteById(Long id) {
+        User currentUser = this.currentUserService.get();
+        Proxy deleting = this.proxyService.getByIdAndUid(id, currentUser.getId());
+        this.proxyService.delete(deleting);
+    }
 }

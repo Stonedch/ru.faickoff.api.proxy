@@ -30,4 +30,12 @@ public class ProxyService {
     public Proxy create(Proxy proxy) {
         return this.save(proxy);
     }
+
+    public void deleteByIdAndUid(Long id, Long uid) {
+        this.proxyRepository.deleteByIdAndUid(id, uid);
+    }
+
+    public void delete(Proxy proxy) {
+        this.proxyRepository.delete(proxy);
+    }
 }

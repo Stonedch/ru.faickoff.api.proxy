@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,5 +62,14 @@ public class ProxyController {
         Proxy created = this.currentUserProxyService.create(creating);
         ProxyResponse responseBody = this.proxyMapper.toProxyResponse(created);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Void> deleteById(
+            HttpServletRequest servletRequest,
+            @PathVariable Long id) {
+        this.currentUserProxyService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
