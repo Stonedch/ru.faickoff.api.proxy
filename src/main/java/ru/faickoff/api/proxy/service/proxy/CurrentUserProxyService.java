@@ -25,4 +25,11 @@ public class CurrentUserProxyService {
         User currentUser = this.currentUserService.get();
         return this.proxyService.getByIdAndUid(id, currentUser.getId());
     }
+
+    public Proxy create(Proxy creating) {
+        User currentUser = this.currentUserService.get();
+        creating.setUid(currentUser.getId());
+        Proxy created = this.proxyService.create(creating);
+        return created;
+    }
 }

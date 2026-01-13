@@ -7,11 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import ru.faickoff.api.proxy.dto.request.proxy.ProxyCreateRequest;
 import ru.faickoff.api.proxy.dto.response.proxy.ProxyListResponse;
 import ru.faickoff.api.proxy.dto.response.proxy.ProxyResponse;
 import ru.faickoff.api.proxy.mapper.proxy.ProxyMapper;
@@ -46,5 +50,16 @@ public class ProxyController {
         Proxy proxy = this.currentUserProxyService.getById(id);
         ProxyResponse responseBody = this.proxyMapper.toProxyResponse(proxy);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<ProxyResponse> create(
+            HttpServletRequest servletRequest,
+            @Valid @RequestBody ProxyCreateRequest proxyCreateRequest) {
+        Proxy creating = this.proxyMapper.toProxy(proxyCreateRequest);
+        Proxy created = this.currentUserProxyService.create(creating);
+        ProxyResponse responseBody = this.proxyMapper.toProxyResponse(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 }

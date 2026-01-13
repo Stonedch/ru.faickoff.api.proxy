@@ -22,4 +22,12 @@ public class ProxyService {
         return this.proxyRepository.findByIdAndUid(id, uid)
                 .orElseThrow(() -> new IllegalArgumentException("Proxy by current id and uid not found"));
     }
+
+    public Proxy save(Proxy proxy) {
+        return this.proxyRepository.save(proxy);
+    }
+
+    public Proxy create(Proxy proxy) {
+        return this.save(proxy);
+    }
 }
