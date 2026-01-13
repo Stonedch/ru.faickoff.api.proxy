@@ -38,4 +38,28 @@ public class CurrentUserProxyService {
         Proxy deleting = this.proxyService.getByIdAndUid(id, currentUser.getId());
         this.proxyService.delete(deleting);
     }
+
+    public Proxy put(Proxy updating) {
+        User currentUser = this.currentUserService.get();
+
+        if (this.proxyService.findByIdAndUid(updating.getId(), currentUser.getId()).isEmpty()) {
+            throw new IllegalArgumentException("Proxy by current id and uid not found");
+        }
+
+        updating.setUid(currentUser.getId());
+
+        return this.proxyService.put(updating);
+    }
+
+    public Proxy patch(Proxy updating) {
+        User currentUser = this.currentUserService.get();
+
+        if (this.proxyService.findByIdAndUid(updating.getId(), currentUser.getId()).isEmpty()) {
+            throw new IllegalArgumentException("Proxy by current id and uid not found");
+        }
+
+        updating.setUid(currentUser.getId());
+
+        return this.proxyService.patch(updating);
+    }
 }

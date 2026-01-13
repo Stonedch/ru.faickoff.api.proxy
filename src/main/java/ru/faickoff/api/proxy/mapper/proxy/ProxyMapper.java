@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import ru.faickoff.api.proxy.dto.request.proxy.ProxyCreateRequest;
+import ru.faickoff.api.proxy.dto.request.proxy.ProxyPatchRequest;
+import ru.faickoff.api.proxy.dto.request.proxy.ProxyPutRequest;
 import ru.faickoff.api.proxy.dto.response.proxy.ProxyListResponse;
 import ru.faickoff.api.proxy.dto.response.proxy.ProxyResponse;
 import ru.faickoff.api.proxy.model.Proxy;
@@ -42,6 +44,26 @@ public class ProxyMapper {
                 .socks5Port(proxyCreateRequest.getSocks5Port())
                 .username(proxyCreateRequest.getUsername())
                 .password(proxyCreateRequest.getPassword())
+                .build();
+    }
+
+    public Proxy toProxy(ProxyPutRequest proxyPutRequest) {
+        return Proxy.builder()
+                .address(proxyPutRequest.getAddress())
+                .httpPort(proxyPutRequest.getHttpPort())
+                .socks5Port(proxyPutRequest.getSocks5Port())
+                .username(proxyPutRequest.getUsername())
+                .password(proxyPutRequest.getPassword())
+                .build();
+    }
+
+    public Proxy toProxy(ProxyPatchRequest proxyPatchRequest) {
+        return Proxy.builder()
+                .address(proxyPatchRequest.getAddress())
+                .httpPort(proxyPatchRequest.getHttpPort())
+                .socks5Port(proxyPatchRequest.getSocks5Port())
+                .username(proxyPatchRequest.getUsername())
+                .password(proxyPatchRequest.getPassword())
                 .build();
     }
 }

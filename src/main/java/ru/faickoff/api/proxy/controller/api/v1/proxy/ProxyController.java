@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ru.faickoff.api.proxy.dto.request.proxy.ProxyCreateRequest;
+import ru.faickoff.api.proxy.dto.request.proxy.ProxyPatchRequest;
+import ru.faickoff.api.proxy.dto.request.proxy.ProxyPutRequest;
 import ru.faickoff.api.proxy.dto.response.proxy.ProxyListResponse;
 import ru.faickoff.api.proxy.dto.response.proxy.ProxyResponse;
 import ru.faickoff.api.proxy.mapper.proxy.ProxyMapper;
@@ -71,5 +75,31 @@ public class ProxyController {
             @PathVariable Long id) {
         this.currentUserProxyService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<ProxyResponse> put(
+            HttpServletRequest servletRequest,
+            @PathVariable Long id,
+            @Valid @RequestBody ProxyPutRequest proxyPutRequest) {
+        Proxy updating = this.proxyMapper.toProxy(proxyPutRequest);
+        updating.setId(id);
+        Proxy updated = this.currentUserProxyService.put(updating);
+        ProxyResponse responseBody = this.proxyMapper.toProxyResponse(updated);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<ProxyResponse> patch(
+            HttpServletRequest servletRequest,
+            @PathVariable Long id,
+            @Valid @RequestBody ProxyPatchRequest proxyPatchRequest) {
+        Proxy updating = this.proxyMapper.toProxy(proxyPatchRequest);
+        updating.setId(id);
+        Proxy updated = this.currentUserProxyService.patch(updating);
+        ProxyResponse responseBody = this.proxyMapper.toProxyResponse(updated);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }
