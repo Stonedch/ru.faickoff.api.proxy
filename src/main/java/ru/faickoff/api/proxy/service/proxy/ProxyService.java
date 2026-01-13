@@ -17,4 +17,9 @@ public class ProxyService {
     public List<Proxy> getAllByUid(Long uid) {
         return this.proxyRepository.findAllByUid(uid);
     }
+
+    public Proxy getByIdAndUid(Long id, Long uid) {
+        return this.proxyRepository.findByIdAndUid(id, uid)
+                .orElseThrow(() -> new IllegalArgumentException("Proxy by current id and uid not found"));
+    }
 }

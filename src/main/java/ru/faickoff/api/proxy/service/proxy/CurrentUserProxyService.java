@@ -20,4 +20,9 @@ public class CurrentUserProxyService {
         User currentUser = this.currentUserService.get();
         return this.proxyService.getAllByUid(currentUser.getId());
     }
+
+    public Proxy getById(Long id) {
+        User currentUser = this.currentUserService.get();
+        return this.proxyService.getByIdAndUid(id, currentUser.getId());
+    }
 }
