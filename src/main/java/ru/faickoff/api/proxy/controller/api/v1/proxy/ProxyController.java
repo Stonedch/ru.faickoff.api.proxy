@@ -62,6 +62,7 @@ public class ProxyController {
     public ResponseEntity<ProxyResponse> create(
             HttpServletRequest servletRequest,
             @Valid @RequestBody ProxyCreateRequest proxyCreateRequest) {
+        this.logger.info(servletRequest, proxyCreateRequest.toString());
         Proxy creating = this.proxyMapper.toProxy(proxyCreateRequest);
         Proxy created = this.currentUserProxyService.create(creating);
         ProxyResponse responseBody = this.proxyMapper.toProxyResponse(created);
@@ -73,6 +74,7 @@ public class ProxyController {
     public ResponseEntity<Void> deleteById(
             HttpServletRequest servletRequest,
             @PathVariable Long id) {
+        this.logger.info(servletRequest, id.toString());
         this.currentUserProxyService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -83,6 +85,7 @@ public class ProxyController {
             HttpServletRequest servletRequest,
             @PathVariable Long id,
             @Valid @RequestBody ProxyPutRequest proxyPutRequest) {
+        this.logger.info(servletRequest, proxyPutRequest.toString());
         Proxy updating = this.proxyMapper.toProxy(proxyPutRequest);
         updating.setId(id);
         Proxy updated = this.currentUserProxyService.put(updating);
@@ -96,6 +99,7 @@ public class ProxyController {
             HttpServletRequest servletRequest,
             @PathVariable Long id,
             @Valid @RequestBody ProxyPatchRequest proxyPatchRequest) {
+        this.logger.info(servletRequest, proxyPatchRequest.toString());
         Proxy updating = this.proxyMapper.toProxy(proxyPatchRequest);
         updating.setId(id);
         Proxy updated = this.currentUserProxyService.patch(updating);
