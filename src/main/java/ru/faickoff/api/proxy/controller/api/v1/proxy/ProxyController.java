@@ -102,4 +102,15 @@ public class ProxyController {
         ProxyResponse responseBody = this.proxyMapper.toProxyResponse(updated);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
+
+    @GetMapping("/random")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<ProxyResponse> getRandomProxy(
+            HttpServletRequest servletRequest) {
+        this.logger.info(servletRequest);
+        Proxy randomProxy = this.currentUserProxyService.getRandom();
+        ProxyResponse responseBody = this.proxyMapper.toProxyResponse(randomProxy);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+
+    }
 }

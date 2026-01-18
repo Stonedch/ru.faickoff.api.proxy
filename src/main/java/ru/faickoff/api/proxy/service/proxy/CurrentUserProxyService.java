@@ -1,6 +1,7 @@
 package ru.faickoff.api.proxy.service.proxy;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
 
@@ -61,5 +62,13 @@ public class CurrentUserProxyService {
         updating.setUid(currentUser.getId());
 
         return this.proxyService.patch(updating);
+    }
+
+    public Proxy getRandom() {
+        List<Proxy> proxies = this.getAll();
+        Random random = new Random();
+        int randomIndex = random.nextInt(proxies.size());
+        Proxy randomProxy = proxies.get(randomIndex);
+        return randomProxy;
     }
 }
